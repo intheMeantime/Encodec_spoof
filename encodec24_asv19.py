@@ -2,6 +2,9 @@ import torchaudio
 import torch
 from transformers import EncodecModel, AutoProcessor
 import pandas as pd
+import time
+
+start = time.time()
 
 # read path **
 file = open("path/path_19D_bona.txt", "r")
@@ -26,6 +29,7 @@ processor = AutoProcessor.from_pretrained("facebook/encodec_24khz")
 
 
 for i, audio_file in enumerate(audio_file_paths):
+    time.sleep(1)
 
     # Load an audio file
     audio_sample, sr = torchaudio.load(audio_file)
@@ -45,14 +49,16 @@ for i, audio_file in enumerate(audio_file_paths):
     audio_values = model(inputs["input_values"], inputs["padding_mask"]).audio_values
 
     # save spoof audio **
-    torchaudio.save(f"{path_spoof}/E01_wav/E01_19D{i:07}.wav", audio_values.squeeze(0), processor.sampling_rate)
+    torchaudio.save(f"{path_spoof}/E01_wav/E01_19D_{i:07}.wav", audio_values.squeeze(0), processor.sampling_rate)
 
     # metadata **
     filename = audio_file.replace(f'{path}/flac/','').replace('.flac', '')
     df.loc[df['fileName'] == filename, 'fileName'] = f'E01_19D_{i:07}'
 
     # check
-    if i % 250 == 0 : print(f'now : {i}')
+    if i % 250 == 0 :
+        print(f'now : {i}')
+        print(f"{time.time()-start:.2f} sec")         
 
 
 # save the new metadata **
