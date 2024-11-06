@@ -53,11 +53,11 @@ for i, audio_file in enumerate(audio_file_paths):
     audio_values = model(inputs["input_values"], inputs["padding_mask"]).audio_values
 
     # save spoof audio **
-    torchaudio.save(f"{path_spoof}/E02_eval_wav/E02_19E_{i:07}.wav", audio_values.squeeze(0), processor.sampling_rate)
+    torchaudio.save(f"{path_spoof}/E01_02_eval_wav/E01_02_19E_{i:06}.wav", audio_values.squeeze(0), processor.sampling_rate)
 
     # metadata **
     filename = audio_file.replace(f'{path}/flac/','').replace('.flac', '')
-    df.loc[df['fileName'] == filename, 'fileName'] = f'E02_19E_{i:07}'
+    df.loc[df['fileName'] == filename, 'fileName'] = f'E01_02_19E_{i:06}'
 
     # check
     if i % 100 == 0 :
@@ -66,7 +66,7 @@ for i, audio_file in enumerate(audio_file_paths):
 
 
 # save the new metadata **
-# E02 == Encodec 48khz
-df['model'] = 'E02'
+# E01_02 == Encodec 48khz
+df['model'] = 'E01_02'
 df['ANS'] = 'spoof'
-df.to_csv(f'{path_spoof}/E02_19eval_spoof.csv', sep= ' ', index=False, header=False)
+df.to_csv(f'{path_spoof}/E01_02_19eval_spoof.csv', sep= ' ', index=False, header=False)
