@@ -7,21 +7,21 @@ import time
 start = time.time()
 
 # read path **
-file = open("path/path_19D_bona.txt", "r")
+file = open("path/path_itw_bona.txt", "r")
 path = file.read()
 file.close()
-file = open("path/path_19D_spoof.txt", "r")
+file = open("path/path_itw_spoof.txt", "r")
 path_spoof = file.read()
 file.close()
 
 # read metadata **
-df = pd.read_csv(f'{path}/ASVspoofta2019.LA.cm.dev_Bonafide.trn', header=None, sep=' ')
+df = pd.read_csv(f'{path}/In_the_wild_Bonafide.trn', header=None, sep=' ')
 df.columns = ['speakID', 'fileName', 'non', 'model', 'ANS']
 
 # get the local audio path
 audio_file_paths =[]
 for i in df['fileName'] :
-    audio_file_paths.append(path+'/flac/'+i+'.flac')
+    audio_file_paths.append(path+'/flac/'+i+'.wav')
 
 # load the model + processor (for pre-processing the audio)
 model = EncodecModel.from_pretrained("facebook/encodec_24khz")
@@ -49,11 +49,11 @@ for i, audio_file in enumerate(audio_file_paths):
     audio_values = model(inputs["input_values"], inputs["padding_mask"]).audio_values
 
     # save spoof audio **
-    torchaudio.save(f"{path_spoof}/E01_01_wav/E01_01_19D_{i:06}.wav", audio_values.squeeze(0), processor.sampling_rate)
+    torchaudio.save(f"{path_spoof}/E01_01_wav/E01_01_itw_{i:06}.wav", audio_values.squeeze(0), processor.sampling_rate)
 
     # metadata **
     filename = audio_file.replace(f'{path}/flac/','').replace('.flac', '')
-    df.loc[df['fileName'] == filename, 'fileName'] = f'E01_01_19D_{i:06}'
+    df.loc[df['fileName'] == filename, 'fileName'] = f'E01_01_itw_{i:06}'
 
     # check
     if i % 250 == 0 :
@@ -65,4 +65,4 @@ for i, audio_file in enumerate(audio_file_paths):
 # E01_01 == Encodec 24khz
 df['model'] = 'E01_01'
 df['ANS'] = 'spoof'
-df.to_csv(f'{path_spoof}/E01_01_19dev_spoof.csv', sep= ' ', index=False, header=False)
+df.to_csv(f'{path_spoof}/E01_01_itw_spoof.csv', sep= ' ', index=False, header=False)
