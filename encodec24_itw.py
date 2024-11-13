@@ -4,8 +4,6 @@ from transformers import EncodecModel, AutoProcessor
 import pandas as pd
 import time
 
-start = time.time()
-
 # read path **
 file = open("path/path_itw_bona.txt", "r")
 path = file.read()
@@ -28,7 +26,7 @@ model = EncodecModel.from_pretrained("facebook/encodec_24khz")
 processor = AutoProcessor.from_pretrained("facebook/encodec_24khz")
 
 for i, audio_file in enumerate(audio_file_paths):
-    time.sleep(1)
+    start = time.time()
 
     # Load an audio file
     audio_sample, sr = torchaudio.load(audio_file)
