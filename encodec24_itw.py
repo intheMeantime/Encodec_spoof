@@ -27,7 +27,6 @@ for i in df['fileName'] :
 model = EncodecModel.from_pretrained("facebook/encodec_24khz")
 processor = AutoProcessor.from_pretrained("facebook/encodec_24khz")
 
-
 for i, audio_file in enumerate(audio_file_paths):
     time.sleep(1)
 
@@ -49,10 +48,10 @@ for i, audio_file in enumerate(audio_file_paths):
     audio_values = model(inputs["input_values"], inputs["padding_mask"]).audio_values
 
     # save spoof audio **
-    torchaudio.save(f"{path_spoof}/E01_01_wav/E01_01_itw_{i:06}.wav", audio_values.squeeze(0), processor.sampling_rate)
+    torchaudio.save(f"{path_spoof}/E01_01_flac/E01_01_itw_{i:06}.flac", audio_values.squeeze(0), processor.sampling_rate)
 
     # metadata **
-    filename = audio_file.replace(f'{path}/flac/','').replace('.flac', '')
+    filename = audio_file.replace(f'{path}/flac/','').replace('.wav', '')
     df.loc[df['fileName'] == filename, 'fileName'] = f'E01_01_itw_{i:06}'
 
     # check

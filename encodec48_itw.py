@@ -34,8 +34,6 @@ for i, audio_file in enumerate(audio_file_paths):
 
     # Load an audio file
     audio_sample, sr = torchaudio.load(audio_file)
-
-    #print(audio_sample.shape)
     if sr != processor.sampling_rate:
         audio_sample = torchaudio.transforms.Resample(sr, processor.sampling_rate)(audio_sample)   
 
@@ -53,10 +51,10 @@ for i, audio_file in enumerate(audio_file_paths):
     audio_values = model(inputs["input_values"], inputs["padding_mask"]).audio_values
 
     # save spoof audio **
-    torchaudio.save(f"{path_spoof}/E01_02_wav/E01_02_itw_{i:06}.wav", audio_values.squeeze(0), processor.sampling_rate)
+    torchaudio.save(f"{path_spoof}/E01_02_flac/E01_02_itw_{i:06}.flac", audio_values.squeeze(0), processor.sampling_rate)
 
     # metadata **
-    filename = audio_file.replace(f'{path}/flac/','').replace('.flac', '')
+    filename = audio_file.replace(f'{path}/flac/','').replace('.wav', '')
     df.loc[df['fileName'] == filename, 'fileName'] = f'E01_02_itw_{i:06}'
 
     # check
